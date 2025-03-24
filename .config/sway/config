@@ -1,44 +1,39 @@
-###############
-# VARIABLES
-###############
+# ===========================
+# Variables
+# ===========================
+# Define variables for key bindings and applications.
 
-# Set mod to Windows/logo key
+# Set mod to Windows/logo key.
 set $mod Mod4
 
-# Set terminal to foot
-set $term foot
+# Set terminal to foot.
+set $term kitty
 
-# Basic navigation
+# Basic navigation keys.
 set $left h
 set $down j
 set $up k
 set $right l
 
-# Set wofi as the default application launcher
+# Set wofi as the default application launcher.
 set $menu wofi -S drun -l top -y 10 -W 600 -H 300 | xargs swaymsg exec --
 
-###############
-# AUTOSTART
-###############
 
-# Spawn Dunst on Sway start for notifications
-#exec dunst
+# ===========================
+# Autostart Applications
+# ===========================
+# Configure applications and services to start automatically.
 
-# SwayNC
+# Start SwayNC notification center.
 exec swaync
-# Toggle control center
-bindsym $mod+Shift+n exec swaync-client -t -sw
 
-# Autostart KeepassXC
+# Autostart KeepassXC password manager.
 exec keepassxc
 
-# Initialize GNOME Keyring
-#exec --no-startup-id gnome-keyring-daemon --start --components=pkcs11,secrets,ssh
-
-# Execute kde polkit
+# Start KDE polkit authentication agent.
 exec /usr/lib/polkit-kde-authentication-agent-1
 
-# Screen idle + Screensaver
+# Configure screen idle and screensaver behavior.
 exec swayidle -w \
     timeout 60 'brightnessctl --class=backlight -s && brightnessctl --class=backlight set 5%' resume 'brightnessctl --class=backlight -r' \
     timeout 120 'swaymsg "output * power off"' resume 'swaymsg "output * power on"' \
