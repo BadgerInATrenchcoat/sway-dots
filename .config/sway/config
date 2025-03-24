@@ -41,101 +41,100 @@ exec swayidle -w \
     timeout 180 'systemctl suspend' \
     before-sleep 'swaylock --indicator-idle-visible -e -f -F -r -K -l -i $HOME/Pictures/.wallpapers/wave.png -C $HOME/.config/swaylock/config'
 
-# Variable imports for xdg-desktop-portal-wlr
+# Import variables for xdg-desktop-portal-wlr.
 exec dbus-update-activation-environment --systemd WAYLAND_DISPLAY XDG_CURRENT_DESKTOP=sway
 
-# Emacs Daemon
-#exec emacs --daemon
 
-###############
-# FUNCTIONALITY
-###############
+# ===========================
+# Functionality
+# ===========================
+# Configure window behavior and application-specific rules.
 
-# Disable dragging windows while in tiling mode
+# Disable dragging windows in tiling mode.
 tiling_drag disable
 
-#    for_window [app_id="org.keepassxc.KeePassXC"] {
-#        mark "keepass_scratch"
-#        floating enable
-#        resize set width 80 ppt height 80 ppt
-#        move position center
-#        move scratchpad
-#        scratchpad hide
-#    }
+# Configure KeepassXC window behavior.
+#for_window [app_id="org.keepassxc.KeePassXC"] floating enable, resize set width 80 ppt height 80 ppt, move position center, move scratchpad
 
-###############
-# VISUAL
-###############
 
-# Set screen resolution and wallpaper
+# ===========================
+# Visual Settings
+# ===========================
+# Configure screen resolution, wallpaper, and window appearance.
+
+# Set screen resolution and wallpaper.
 #output eDP-1 mode 2880x1800@120.000Hz render_bit_depth 10 scale 1.5 adaptive_sync on bg $HOME/Pictures/.wallpapers/mountainBG.png fill
-#output eDP-1 mode 1920x1200@120.000Hz render_bit_depth 10 scale 1.0 bg $HOME/Pictures/.wallpapers/mountainBG.png fill
 output eDP-1 mode 2880x1800@60.000Hz render_bit_depth 8 scale 1.5 bg $HOME/Pictures/.wallpapers/mountainBG.png fill
+#output eDP-1 mode 1920x1200@120.000Hz render_bit_depth 8 scale 1.0 bg $HOME/Pictures/.wallpapers/mountainBG.png fill
 #output eDP-1 disable
 #output DP-2 mode 1920x1080@200Hz render_bit_depth 8 scale_filter linear subpixel rgb scale 1 adaptive_sync on bg $HOME/Pictures/.wallpapers/mountainBG.png fill
 
-# Change bar to waybar
+
+# Change bar to Waybar.
 bar {
     swaybar_command waybar
 }
 
-# Window appearance
+# Configure window appearance.
 gaps inner 10
 smart_gaps on
 
-# Border settings
+# Border settings.
 default_border pixel 2
 default_floating_border pixel 3
 
-#exec border pixel 2
+# Client border colors.
 client.focused #5e81ac #5e81ac #e0fbfc
 client.unfocused #4c556a #4c556a #e0fbfc
 hide_edge_borders smart
 
-# Window titles
+# Configure window titles.
 title_align center
 font "pango:Jet Brains Mono 10"
 for_window [title="."] title_format "<b>%title</b>"
 
-# Floating window rules
+# Floating window rules.
 floating_modifier $mod normal
 for_window [app_id="Tor Browser"] floating enable
 for_window [class="Mullvad Browser"] floating enable
 for_window [app_id="Windscribe"] floating enable
 for_window [title="Extension: (Kagi Search for Firefox)*"] floating enable, resize set width 30 ppt height 70 ppt, move position right
-#for_window [app_id="io.github.nokse22.HighTide"] floating enable
-#for_window [app_id="firefox"] layout tabbed enable
-#for_window [app_id="brave-browser"] layout tabbed enable
 
-# Window transparency
+# Window transparency settings.
 for_window [class="tidal-hifi"] opacity 0.97
 for_window [class="tidal-hifi"] floating enable, resize set width 80 ppt height 80 ppt, move position center, move scratchpad
 
-###############
-# RESIZE MODE
-###############
+
+# ===========================
+# Resize Mode
+# ===========================
+# Configure resize mode key bindings.
 
 mode "resize" {
+    # Resize using navigation keys.
     bindsym $left resize shrink width 10px
     bindsym $down resize grow height 10px
     bindsym $up resize shrink height 10px
     bindsym $right resize grow width 10px
 
-    # Arrow key alternatives
+    # Resize using arrow keys.
     bindsym Left resize shrink width 10px
     bindsym Down resize grow height 10px
     bindsym Up resize shrink height 10px
     bindsym Right resize grow width 10px
 
-    # Exit resize mode
+    # Exit resize mode.
     bindsym Return mode "default"
     bindsym Escape mode "default"
 }
 
-###############
-# INPUT DEVICES
-###############
 
+# ===========================
+# Input Devices
+# ===========================
+# Configure input device settings.
+
+# Touchpad settings.
 input "2362:12305:ASUP1208:00_093A:3011_Touchpad" {
     tap enabled
     natural_scroll enabled
@@ -143,52 +142,63 @@ input "2362:12305:ASUP1208:00_093A:3011_Touchpad" {
     drag disabled
 }
 
+# Keyboard settings.
 input "type:keyboard" {
     xkb_options caps:backspace
     #xkb_options caps:ctrl_modifier
 }
 
+# Logitech USB Receiver settings.
 input "1133:50503:Logitech_USB_Receiver" {
     accel_profile flat
     pointer_accel 0.25
 }
 
-###############
-# KEY BINDINGS
-###############
 
-# System controls
+# ===========================
+# Key Bindings
+# ===========================
+# Configure key bindings for system controls, audio, media, and more.
+
+
+# System controls.
 bindsym XF86PowerOff exec waylogout -C $HOME/.config/waylogout/config
 
-# Brightness controls
+# Brightness controls.
 bindsym XF86MonBrightnessUp exec lux -a 1%
 bindsym XF86MonBrightnessDown exec lux -m 2 -s 1%
 
-# Keyboard backlight
+# Keyboard backlight controls.
 bindsym XF86KbdBrightnessUp exec brightnessctl --device=asus::kbd_backlight set +1
 bindsym XF86KbdBrightnessDown exec brightnessctl --device=asus::kbd_backlight set 1-
 bindsym XF86Launch3 exec asusctl led-mode -n
 
-# Audio controls
+# Audio controls.
 bindsym XF86AudioRaiseVolume exec wpctl set-volume -l 1.5 @DEFAULT_AUDIO_SINK@ 5%+
 bindsym XF86AudioLowerVolume exec wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
 bindsym XF86AudioMute exec wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
 bindsym XF86AudioMicMute exec wpctl set-mute @DEFAULT_AUDIO_SOURCE@ toggle
 
-# Media controls
+# Media controls.
 bindsym Menu+Home exec playerctl previous
 bindsym Menu+Prior exec playerctl play
 bindsym Menu+Next exec playerctl pause
 bindsym Menu+End exec playerctl next
 
-# Screenshot
+# Screenshot tools.
 bindsym $mod+Tab exec grim -g "$(slurp)" - | swappy -f -
-bindsym $mod+Shift+Tab exec normcap -m parse -c "#81a1c1"
+bindsym $mod+Shift+Tab exec grim - | swappy -f -
+#bindsym $mod+Shift+Tab exec normcap -m parse -c "#81a1c1"
 
-# Waybar toggle
+# Waybar toggle.
 bindsym $mod+Shift+w exec killall -SIGUSR1 waybar
 
-# Basic window controls
+# SwayNC toggle control center.
+bindsym $mod+Shift+n exec swaync-client -t -sw
+
+bindsym $mod+p exec $HOME/.config/sway/scripts/toggle-display.sh
+
+# Basic window controls.
 bindsym $mod+Return exec $term
 bindsym $mod+Shift+q kill
 bindsym $mod+d exec $menu
@@ -196,7 +206,7 @@ bindsym $mod+r mode "resize"
 bindsym $mod+Shift+c reload
 bindsym $mod+Shift+e exec waylogout -C $HOME/.config/waylogout/config
 
-# Focus movement
+# Focus movement.
 bindsym $mod+$left focus left
 bindsym $mod+$down focus down
 bindsym $mod+$up focus up
@@ -207,7 +217,7 @@ bindsym $mod+Down focus down
 bindsym $mod+Up focus up
 bindsym $mod+Right focus right
 
-# Window movement
+# Window movement.
 bindsym $mod+Shift+$left move left
 bindsym $mod+Shift+$down move down
 bindsym $mod+Shift+$up move up
@@ -218,7 +228,7 @@ bindsym $mod+Shift+Down move down
 bindsym $mod+Shift+Up move up
 bindsym $mod+Shift+Right move right
 
-# Workspace switching
+# Workspace switching.
 bindsym $mod+1 workspace number 1
 bindsym $mod+2 workspace number 2
 bindsym $mod+3 workspace number 3
@@ -230,7 +240,7 @@ bindsym $mod+8 workspace number 8
 bindsym $mod+9 workspace number 9
 bindsym $mod+0 workspace number 10
 
-# Move container to workspace
+# Move container to workspace.
 bindsym $mod+Shift+1 move container to workspace number 1
 bindsym $mod+Shift+2 move container to workspace number 2
 bindsym $mod+Shift+3 move container to workspace number 3
@@ -242,7 +252,7 @@ bindsym $mod+Shift+8 move container to workspace number 8
 bindsym $mod+Shift+9 move container to workspace number 9
 bindsym $mod+Shift+0 move container to workspace number 10
 
-# Layout controls
+# Layout controls.
 bindsym $mod+b splith
 bindsym $mod+v splitv
 bindsym $mod+s layout stacking
@@ -253,11 +263,9 @@ bindsym $mod+Shift+space floating toggle
 bindsym $mod+space focus mode_toggle
 bindsym $mod+a focus parent
 
-# Scratchpad
+# Scratchpad controls.
 bindsym $mod+minus scratchpad show
 bindsym $mod+equal scratchpad show; scratchpad show
 bindsym $mod+Shift+minus floating enable, resize set width 80 ppt height 80 ppt, move position center, move scratchpad
-#bindsym $mod+Shift+equal [con_mark="keepass_scratch"] scratchpad show
-#bindsym $mod+Shift+equal [con_mark="keepass_scratch"] move workspace keepass_hidden; [app_id="keepassxc"] workspace keepass_hidden
-#bindsym $mod+minus exec 'swaymsg "[con_mark=keepass_scratch] move scratchpad" && swaymsg "scratchpad show"'
+bindsym $mod+Shift+p [app_id="org.keepassxc.KeePassXC"] scratchpad show
 #bindsym $mod+Shift+m [class="tidal-hifi"] scratchpad show
