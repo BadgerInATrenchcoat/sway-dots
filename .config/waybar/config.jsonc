@@ -19,6 +19,7 @@
   "modules-right": [
     "tray",
     "privacy",
+    "idle_inhibitor",
     "network",
     "custom/notification",
     "battery",
@@ -43,6 +44,13 @@
         "tooltip-icon-size": 8
       }
     ]
+  },
+  "idle_inhibitor": {
+    "format": "{icon}",
+    "format-icons": {
+      "activated": "",
+      "deactivated": ""
+    }
   },
   "network": {
     "interface": "wlan0",
