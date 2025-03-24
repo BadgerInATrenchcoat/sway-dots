@@ -1,64 +1,135 @@
-# Colors
+# ===========================
+# Color Configuration
+# ===========================
+# Enable color support for the shell.
+
 autoload -U colors && colors
 
-# history
+
+# ===========================
+# History Configuration
+# ===========================
+# Configure shell history settings.
+
+# Set the maximum number of history entries.
 HISTSIZE=1000000
+
+# Set the number of history entries to save.
 SAVEHIST=100000
-setopt HIST_IGNORE_SPACE
+
+# Specify the file to save history.
 HISTFILE=~/.cache/zsh/history
 
-# auto/tab completion
+# Ignore commands prefixed with a space.
+setopt HIST_IGNORE_SPACE
+
+
+# ===========================
+# Completion System
+# ===========================
+# Configure and initialize the completion system.
+
 autoload -U compinit
-zstyle ':completion:*' menu select
-zmodload zsh/complist
 compinit
+
+# Enable menu selection for completion.
+zstyle ':completion:*' menu select
+
+# Load the completion list module.
+zmodload zsh/complist
+
+# Include hidden files in glob completion.
 _comp_options+=(globdots)
 
-# Hotkeys
-## Ctrl+Arrow = word skip
+
+# ===========================
+# Key Bindings
+# ===========================
+# Configure custom key bindings.
+
+# Move forward by a word.
 bindkey '^[[1;5C' forward-word
+
+# Move backward by a word.
 bindkey '^[[1;5D' backward-word
-## Bind Up/Down arrows to ZSH-Substring-Search
+
+# Search history upwards using substring search.
 bindkey '^[[A' history-substring-search-up
+
+# Search history downwards using substring search.
 bindkey '^[[B' history-substring-search-down
 
-# Plugins
-source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
-source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
-source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
-source <(fzf --zsh)
 
+# ===========================
+# Plugins
+# ===========================
+# Load additional plugins for enhanced functionality.
+
+# Load the autosuggestions plugin.
+source /usr/share/zsh/plugins/zsh-autosuggestions/zsh-autosuggestions.zsh
+
+# Load the syntax highlighting plugin.
+source /usr/share/zsh/plugins/zsh-syntax-highlighting/zsh-syntax-highlighting.zsh
+
+# Load the history substring search plugin.
+source /usr/share/zsh/plugins/zsh-history-substring-search/zsh-history-substring-search.zsh
+
+# Load fzf integration if fzf is installed.
+if command -v fzf >/dev/null 2>&1; then
+  source <(fzf --zsh)
+fi
+
+
+# ===========================
 # Aliases
-# Wayland flags for electron / chromium applications "--enable-features=UseOzonePlatform --ozone-platform=wayland"
-alias cat="bat --tabs 2"
-alias ll="ls -al"
-alias mv="mv -i"
-alias cp="cp -i"
-## Colorize common commands
+# ===========================
+# Define custom aliases for common commands.
+
+# Colorize the output of common commands.
 alias diff="diff --color=auto"
 alias ls="ls --color"
 alias grep="grep --color=auto"
 alias ip="ip -color=auto"
+
+# Aliases for file and directory operations.
+alias cat="bat --tabs 2"
+alias ll="ls -al"
+alias mv="mv -i"
+alias cp="cp -i"
+
+# Aliases for specific applications and utilities.
 alias zrl="source $HOME/.zshrc && source $HOME/.zshenv"
-alias emacsclient="emacsclient -c -n -a ''" 
+alias emacsclient="emacsclient -c -n -a ''"
 alias bootwin="sudo efibootmgr --bootnext 0001 && reboot"
 alias calcurse-caldav='CALCURSE_CALDAV_PASSWORD=$(pass show calcurse-cd) calcurse-caldav'
-#alias fzf='fzf --tmux 80% --layout reverse --border'
-#alias es='fzf --color=spinner:#88C0D0,hl:#81A1C1,fg:#D8DEE9,header:#88C0D0,info:#8FBCBB,pointer:#88C0D0,marker:#88C0D0,fg+:#ECEFF4,bg+:#3B4252,prompt:#81A1C1,hl+:#A3BE8C,border:#4C566A,gutter:-1,query:#D8DEE9,disabled:#4C566A,preview-fg:#E5E9F0,preview-border:#4C566A --height 40% --border rounded --layout=reverse --prompt="❯ " --pointer="❯" --marker="❯" --preview "bat --style=numbers --color=always {}" --preview-window=right:hidden --bind "l:preview-down,h:preview-up,enter:execute(nvim {})"'
-[ -f ~/.config/fzf/config.sh ] && source ~/.config/fzf/config.sh
 alias es='fzf --bind "enter:execute(nvim {})"'
-# Add Starship Prompt
-eval "$(starship init zsh)"
-# XDG Variables
-XDG_CURRENT_DESKTOP=sway
 
-# Tmux
-## Auto-start tmux and attach to session
-#if [ -z "$TMUX" ] && [ -n "$DISPLAY" ]; then
-#    tmux attach -t main || tmux new-session -s main
-#fi
-## Autostart tmux session in background
-if ! tmux has-session -t main 2>/dev/null; then
+
+# ===========================
+# Prompt Configuration
+# ===========================
+# Configure the shell prompt.
+
+eval "$(starship init zsh)"
+
+
+# ===========================
+# Tmux Session Management
+# ===========================
+# Automatically start a tmux session if tmux is installed.
+
+if command -v tmux >/dev/null 2>&1; then
+  if ! tmux has-session -t main 2>/dev/null; then
     tmux new-session -d -s main
+  fi
 fi
 
+
+# ===========================
+# FZF Configuration
+# ===========================
+# Load custom fzf configuration if it exists.
+
+if [ -f ~/.config/fzf/config.sh ]; then
+  source ~/.config/fzf/config.sh
+fi
