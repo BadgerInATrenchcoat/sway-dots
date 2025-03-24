@@ -128,9 +128,9 @@ handle_image() {
     local mimetype="${1}"
     case "${mimetype}" in
         # SVG
-         image/svg+xml|image/svg)
-             convert -- "${FILE_PATH}" "${IMAGE_CACHE_PATH}" && exit 6
-             exit 1;;
+        svg)
+            rsvg-convert --width=800 --height=800 "$path" -o "$cached" && exit 6
+            ;;
 
         ## DjVu
         # image/vnd.djvu)
